@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encriptador de texto</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header>
+        <img src="./imagenes/Logo.png" alt="Logo Alura">
+    </header>
+    <main>
+        <div class="principal">
+            <textarea id="idtexto" placeholder="Ingrese el texto aquí" rows="10"></textarea>
+            <div class="texto_botones">
+                <p><img src="./imagenes/Vector.png">&nbsp;Solo letras minúsculas y sin acentos</p>
+                <div class="boton">
+                    <button id="botonencriptar" onclick="encriptar_texto()">Encriptar</button>
+                    <button id="botondesecriptar" onclick="desencriptar_texto()">Desencriptar</button>
+                </div>
+            </div>
+        </div>
+        <div class="cuadro_mensaje">
+            <img class="imagenref" src="./imagenes/Muñeco.png" alt="imagenref">
+            <h3>Ningun mensaje fue encontrado</h3>
+            <p>Ingresa el texto que desea encriptar o desencriptar</p>
+            <div>
+                <p id="resultado"></p>
+            </div>
+            <button id="botoncopiar" onclick="copiar()">Copiar</button>
+        </div>
+    </main>
+    <footer>
+        <p>Desarrollado por <a href="https://github.com/Itemt">Cristian Andrés Ramos</a></p>
+    </footer>
+    <script>
+        function encriptar(texto) {
+            const llaves = {
+                'a': 'ai',
+                'e': 'enter',
+                'i': 'imes',
+                'o': 'ober',
+                'u': 'ufat',
+            };
+            return texto.split("").map((c) => llaves[c] || c).join("");
+        }
+
+        function desencriptar(texto) {
+            let texto_original = texto;
+            const llaves = {
+                'ai': 'a',
+                'enter': 'e',
+                'imes': 'i',
+                'ober': 'o',
+                'ufat': 'u',
+            };
+            for (const [encriptado, original] of Object.entries(llaves)) {
+                texto_original = texto_original.split(encriptado).join(original);
+            }
+            return texto_original;
+        }
+
+        function encriptar_texto() {
+            const texto = document.getElementById("idtexto").value;
+            const resultado = encriptar(texto);
+            document.getElementById("resultado").innerHTML = resultado;
+            document.querySelector(".cuadro_mensaje img").style.display = "none";
+            document.querySelector(".cuadro_mensaje h3").style.display = "none";
+            document.querySelector(".cuadro_mensaje p").style.display = "none";
+            document.getElementById("botoncopiar").style.display = "block";
+        }
+
+        function desencriptar_texto() {
+            const texto = document.getElementById("idtexto").value;
+            const resultado = desencriptar(texto);
+            document.getElementById("resultado").innerHTML = resultado;
+            document.querySelector(".cuadro_mensaje img").style.display = "none";
+            document.querySelector(".cuadro_mensaje h3").style.display = "none";
+            document.querySelector(".cuadro_mensaje p").style.display = "none";
+            document.getElementById("botoncopiar").style.display = "block";
+        }
+
+        function copiar() {
+            const resultado = document.getElementById("resultado").innerText;
+            const textarea = document.createElement("textarea");
+            textarea.value = resultado;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            const copiarButton = document.getElementById("botoncopiar");
+            copiarButton.innerHTML = 'Copiado';
+            setTimeout(() => {
+                copiarButton.innerHTML = 'Copiar';
+            }, 2000);
+        }
+
+        document.getElementById("botonencriptar").addEventListener("click", encriptar_texto);
+        document.getElementById("botondesecriptar").addEventListener("click", desencriptar_texto);
+        document.getElementById("botoncopiar").addEventListener("click", copiar);
+    </script>
+</body>
+
+</html>
